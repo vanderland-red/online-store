@@ -14,6 +14,7 @@ class User(db.Model):
 
 
 
+
 class Product(db.Model):
     __tablename__ = 'products'
     
@@ -21,6 +22,7 @@ class Product(db.Model):
     name = db.Column(db.String(150), nullable=False, index=True)
     description = db.Column(db.Text, nullable=True)
     price = db.Column(db.Float, nullable=False, index=True)
+    active = db.Column(db.Boolean, default=True, nullable=False)
 
     def __repr__(self):
         return f'<Product {self.name}>'

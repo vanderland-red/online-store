@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>فروشگاه اینترنتی پینکرتون</title>
+{% endblock %}
+
+{% block content %}
+    {% for p in product %}
+        <a href="{{ url_for('general.product', id= p.id, name= p.name) }}">{{ p.name }}</a><br><br>
+    {% endfor %}
+    
+    <a style="float: left;" href="{{ url_for('general.about') }}">about</a><br><br>
+    <a style="float: left;" href="{{ url_for('admin.login') }}">login</a><br><br>
+    <a style="float: left;" href="{{ url_for('admin.product') }}">add product</a>
+
+        
+    
+{% endblock %}
