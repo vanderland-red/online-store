@@ -1,4 +1,10 @@
-onve/
-   __pycache__/
-   *.pyc
-/static/cover/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+/static/
+static/
+
+venv/
+env/

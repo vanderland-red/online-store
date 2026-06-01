@@ -6,6 +6,7 @@
 
 {% block content %}
     <div class="product-detail">
+        <img src="/static/cover/{{ product.id }}.jpg">
         <h1>{{ product.name }}</h1>
         <p><strong>قیمت:</strong> {{ product.price }} تومان</p>
         <p><strong>توضیحات:</strong> {{ product.description }}</p>

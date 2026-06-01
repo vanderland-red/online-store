@@ -36,13 +36,14 @@ def dashboard() :
 def product() :
 
     if request.method == "GET" :
-        products = Product.query.all()
-        return render_template('admin/product.html' , products=products)
+        product = Product.query.all()
+        return render_template('admin/product.html' , products=product)
 
     name = request.form.get("name")
     description = request.form.get("description")
     price = request.form.get("price")
     active = request.form.get("active")
+    file = request.files.get("cover")
 
     p = Product(name=name , description=description , price=price)
     if active == None :
@@ -52,6 +53,8 @@ def product() :
 
     db.session.add(p)
     db.session.commit()
+
+    file.save(f'static/cover/{p.id}_{p.name}.jpg')
     
     return 'Oh Yeh Man!!'
 
@@ -68,6 +71,7 @@ def edit_product(id) :
         description = request.form.get("description")
         price = request.form.get("price")
         active = request.form.get("active")
+        file = request.files.get("cover")
 
         product.name = name
         product.description = description
@@ -78,6 +82,9 @@ def edit_product(id) :
             product.active = 1
 
         db.session.commit()
+
+        if file != None :
+            file.save(f'static/cover/{ product.id }.jpg')
 
         return redirect(url_for("admin.product"))
 
