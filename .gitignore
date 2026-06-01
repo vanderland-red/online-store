@@ -1,3 +1,4 @@
 onve/
    __pycache__/
    *.pyc
+/static/cover/
