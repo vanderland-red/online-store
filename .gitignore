@@ -1,8 +1,4 @@
+.idae/
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-
 /static/
-static/
 
