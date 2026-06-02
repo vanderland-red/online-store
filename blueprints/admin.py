@@ -54,7 +54,7 @@ def product() :
     db.session.add(p)
     db.session.commit()
 
-    file.save(f'static/cover/{p.id}_{p.name}.jpg')
+    file.save(f'static/cover/{p.id}.jpg')
     
     return 'Oh Yeh Man!!'
 
@@ -83,7 +83,7 @@ def edit_product(id) :
 
         db.session.commit()
 
-        if file != None :
+        if file and file.filename != '':
             file.save(f'static/cover/{ product.id }.jpg')
 
         return redirect(url_for("admin.product"))

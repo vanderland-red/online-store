@@ -5,6 +5,7 @@ from flask_wtf import CSRFProtect
 from blueprints.general import bp as general
 from blueprints.user import bp as user
 from blueprints.admin import bp as admin
+from flask_login import LoginManager
 from models.tables import User,Product
 
 app = Flask(__name__)
@@ -19,9 +20,16 @@ app.db = db
 
 _ = User, Product
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 app.register_blueprint(general)
 app.register_blueprint(user)
 app.register_blueprint(admin)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
