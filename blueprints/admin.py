@@ -88,5 +88,6 @@ def edit_product(id) :
 
         return redirect(url_for("admin.product"))
 
+
     
 

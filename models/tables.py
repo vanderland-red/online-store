@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from extentions import db
+from extentions import db,get_current_time
 
 
 class User(db.Model, UserMixin):
@@ -42,6 +42,13 @@ class Cart(db.Model):
 
     user = db.relationship("User", backref="carts")
 
+    def total_price(self):
+        total = 0
+        for item in self.cart_items:
+            total += item.product.price * item.quantity
+        return total
+        
+
     def __repr__(self):
         return f"<Cart id={self.id} status={self.status}>"
 
@@ -51,6 +58,8 @@ class Payment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(50), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    date_created = db.Column(db.String(15), default= get_current_time)
 
     cart_id = db.Column(
         db.Integer,
@@ -68,7 +77,8 @@ class CartItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     cart_id = db.Column(db.Integer, db.ForeignKey("carts.id"), nullable=False)
-    quantity = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, nullable=False)
+
 
     product = db.relationship("Product", backref="cart_items")
     cart = db.relationship("Cart", backref="cart_items")

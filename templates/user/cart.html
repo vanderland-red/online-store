@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>سبد خرید کاربر</title>
+{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% set cart = current_user.carts
+| selectattr('status','equalto','pending')
+| list | first %}
+
+{% if cart %}
+    {% for cart_item in cart.cart_items %}
+        <div>
+            {{ cart_item.product.name }} , {{ cart_item.quantity }}
+
+            <form method="POST"
+                  action="{{ url_for('user.remove_from_cart', item_id=cart_item.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="remove-cart">حذف از سبد</button>
+            </form>
+        </div>
+    {% endfor %}
+
+    <b>قیمت کل : {{ cart.total_price() }}</b>
+{% else %}
+    سبد خرید خالی است
+{% endif %}
+{% endblock %}

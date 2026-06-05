@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for,flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, login_required
-from models.tables import User
+from flask_login import login_user, login_required,current_user,logout_user
+from models.tables import User,Cart,Product,CartItem
 from extentions import db
 
 bp = Blueprint("user", __name__)
@@ -58,5 +58,76 @@ def login():
         return "نام کاربری یا رمز عبور اشتباه است"
     
     login_user(user)
-    
+     
     return redirect(url_for('user.dashboard_user'))
+
+
+
+@bp.route("/cart", methods = ["GET"])
+@login_required
+def cart():
+    return render_template("user/cart.html")
+
+
+@bp.route("/add-to-cart", methods=["GET"])
+def add_to_cart():
+    if not current_user.is_authenticated:
+        flash("برای اضافه کردن محصول به سبد خرید، ابتدا وارد حساب کاربری شوید", "error")
+        return redirect(url_for("user.login"))
+
+    id = request.args.get("id")
+    product = Product.query.filter(Product.id == id).first_or_404()
+
+    cart = Cart.query.filter_by(user_id=current_user.id, status="pending").first()
+    if cart is None:
+        cart = Cart(status="pending", user=current_user)
+        db.session.add(cart)
+        db.session.commit()
+
+    cart_item = CartItem.query.filter_by(
+        cart_id=cart.id,
+        product_id=product.id
+    ).first()
+
+    if cart_item is None:
+        item = CartItem(quantity=1, cart=cart, product=product)
+        item.price = product.price
+        db.session.add(item)
+    else:
+        cart_item.quantity += 1
+
+    db.session.commit()
+
+    flash("محصول با موفقیت به سبد خرید اضافه شد", "success")
+    return redirect(url_for("user.cart"))
+
+
+
+@bp.route("/remove-from-cart/<int:item_id>", methods=["POST"])
+@login_required
+def remove_from_cart(item_id):
+    cart_item = CartItem.query \
+        .join(Cart) \
+        .filter(
+            CartItem.id == item_id,
+            Cart.user_id == current_user.id,
+            Cart.status == "pending"
+        ).first_or_404()
+    
+    if cart_item.quantity > 1 :
+        cart_item.quantity -= 1
+    else :
+        db.session.delete(cart_item)
+
+    db.session.commit()
+
+    flash("محصول از سبد خرید حذف شد", "success")
+    return redirect(url_for("user.cart"))
+
+
+@bp.route("/logout", methods=["GET"])
+@login_required
+def logout():
+    logout_user()
+    flash("با موفقیت از حساب کاربری خارج شدید", "success")
+    return redirect(url_for("user.register"))

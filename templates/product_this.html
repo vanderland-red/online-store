@@ -1,24 +1,34 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <title>{{ product.name }} - فروشگاه اینترنتی</title>
+<title>{{ product.name }} - فروشگاه اینترنتی</title>
 {% endblock %}
 
 {% block content %}
-    <div class="product-detail">
-        <img style="height: 200px;" src="/static/cover/{{ product.id }}.jpg">
-        <h1>{{ product.name }}</h1>
-        <p><strong>قیمت:</strong> {{ product.price }} تومان</p>
-        <p><strong>توضیحات:</strong> {{ product.description }}</p>
-        <p>
-            <strong>وضعیت:</strong>
-            {% if product.active == 1 %}
-                <span style="color: green;">موجود</span>
-            {% else %}
-                <span style="color: red;">ناموجود</span>
-            {% endif %}
-        </p>
-        <br>
-        <a href="{{ url_for('general.main') }}">بازگشت به صفحه اصلی</a>
-    </div>
+<div class="product-detail">
+    <img style="height: 200px;" src="/static/cover/{{ product.id }}.jpg">
+    <h1>{{ product.name }}</h1>
+    <p><strong>قیمت:</strong> {{ product.price }} تومان</p>
+    <p><strong>توضیحات:</strong> {{ product.description }}</p>
+    <p>
+        <strong>وضعیت:</strong>
+        {% if product.active == 1 %}
+        <span style="color: green;">موجود</span>
+        {% else %}
+        <span style="color: red;">ناموجود</span>
+        {% endif %}
+    </p>
+    <br>
+
+    <form action="/add-to-cart" method="GET">
+        <input type="hidden" name="id" value="{{ product.id }}">
+        <input type="submit" value="اضافه کردن به سبد خرید">
+
+    </form>
+
+
+    <a href="{{ url_for('user.logout') }}">خروج از حساب</a><br><br>
+
+    <a href="{{ url_for('general.main') }}">بازگشت به صفحه اصلی</a>
+</div>
 {% endblock %}
