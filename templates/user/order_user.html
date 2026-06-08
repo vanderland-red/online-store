@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+   
+{% endblock %}
+
+{% block content %}
+
+    وضعیت پرداخت : {{ cart.status }}<br><br>
+
+    {% for item in cart.cart_items %}
+        {{ item.product.name }} : {{ item.product.price }}<br>
+    {% endfor %}
+
+{% endblock %}

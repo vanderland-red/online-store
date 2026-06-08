@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>درگاه پرداخت تستی</title>
+</head>
+<body>
+
+<h2>درگاه پرداخت (Mock)</h2>
+
+<p>مبلغ: {{ payment.price }} تومان</p>
+<p>توکن: {{ payment.token }}</p>
+
+<form action="{{ url_for('user.verify') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="token" value="{{ payment.token }}">
+    <input type="hidden" name="result" value="success">
+    <button type="submit">پرداخت موفق</button>
+</form>
+
+<br>
+
+<form action="{{ url_for('user.verify') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="token" value="{{ payment.token }}">
+    <input type="hidden" name="result" value="failed">
+    <button type="submit">پرداخت ناموفق</button>
+</form>
+
+</body>
+</html>

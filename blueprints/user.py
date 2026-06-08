@@ -1,15 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for,flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required,current_user,logout_user
-from models.tables import User,Cart,Product,CartItem
+from models.tables import User,Cart,Product,CartItem,Payment
 from extentions import db
+import uuid
 
 bp = Blueprint("user", __name__)
 
-@bp.route("/user/dashboard")
-@login_required
-def dashboard_user():
-    return render_template("user/dashboard_user.html")
 
 @bp.route("/user/register", methods=["POST", "GET"])
 def register():
@@ -131,3 +128,84 @@ def logout():
     logout_user()
     flash("با موفقیت از حساب کاربری خارج شدید", "success")
     return redirect(url_for("user.register"))
+
+
+
+
+
+
+
+@bp.route("/payment", methods=["POST"])
+@login_required
+def payment():
+
+    cart = Cart.query.filter_by(
+        user_id=current_user.id,
+        status="pending"
+    ).first()
+
+    if not cart:
+        return "سبد خریدی برای پرداخت وجود ندارد", 400
+
+    token = str(uuid.uuid4())
+
+    pay = Payment(
+        token=token,
+        price=cart.total_price(),
+        status="pending",
+        cart=cart
+    )
+
+    db.session.add(pay)
+    db.session.commit()
+
+    return redirect(url_for("user.mock_gateway", token=token))
+
+
+@bp.route("/mock-gateway/<token>", methods=["GET"])
+@login_required
+def mock_gateway(token):
+
+    payment = Payment.query.filter_by(token=token).first_or_404()
+
+    return render_template("user/mock_gateway.html", payment=payment)
+
+
+
+@bp.route("/verify", methods=["POST"])
+@login_required
+def verify():
+
+    token = request.form.get("token")
+    result = request.form.get("result")
+
+    payment = Payment.query.filter_by(token=token).first_or_404()
+
+    if result == "success":
+        payment.status = "paid"
+        payment.cart.status = "paid"
+        payment.refid = "refid"
+        payment.transation_id = "transation_id"
+        payment.card_pan = "card_pan"
+        flash("پرداخت با موفقیت انجام شد ", "success")
+    else:
+        payment.status = "failed"
+        flash("پرداخت ناموفق بود ", "error")
+
+    db.session.commit()
+
+    return redirect(url_for("user.dashboard_user"))
+
+
+@bp.route("/user/dashboard")
+@login_required
+def dashboard_user():
+    return render_template("user/dashboard_user.html")
+
+
+@bp.route("/user/dashboard/order/<id>", methods=["GET"])
+@login_required
+def order(id):
+    cart = Cart.query.filter_by(id=id, user_id=current_user.id).first_or_404()
+    return render_template("user/order_user.html", cart=cart)
+

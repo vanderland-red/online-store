@@ -1,9 +1,22 @@
 {% extends "base.html" %}
 
 {% block title %}
-   
+   <title>پنل کاربری</title>
 {% endblock %}
 
 {% block content %}
-    <h1>this is dashboard</h1>
+
+   {% for cart in current_user.carts | selectattr('status', '!=', 'pending') %}
+    <a href="{{ url_for('user.order', id=cart.id) }}">{{ cart.id }} - {{ cart.status }}</a>
+{% endfor %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 {% endblock %}

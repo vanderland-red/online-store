@@ -60,6 +60,10 @@ class Payment(db.Model):
     status = db.Column(db.String(50), nullable=False)
     price = db.Column(db.Float, nullable=False)
     date_created = db.Column(db.String(15), default= get_current_time)
+    token = db.Column(db.String(255))
+    refid = db.Column(db.String(255)) #شماره پیگیری تراکنش   
+    transation_id = db.Column(db.String(255)) #پیگیری تراکنش
+    card_pan = db.Column(db.String(255)) #نمایشی از ارقام کارت 
 
     cart_id = db.Column(
         db.Integer,
@@ -70,6 +74,8 @@ class Payment(db.Model):
 
     def __repr__(self):
         return f"<Payment id={self.id} status={self.status}>"
+    
+
     
 class CartItem(db.Model):
     __tablename__ = 'cart_items'

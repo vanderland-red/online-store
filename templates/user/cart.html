@@ -7,13 +7,13 @@
 {% block content %}
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="flash {{ category }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="flash {{ category }}">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
 {% endwith %}
 
 {% set cart = current_user.carts
@@ -23,18 +23,24 @@
 {% if cart %}
     {% for cart_item in cart.cart_items %}
         <div>
-            {{ cart_item.product.name }} , {{ cart_item.quantity }}
+            {{ cart_item.product.name }} — تعداد: {{ cart_item.quantity }}
 
-            <form method="POST"
-                  action="{{ url_for('user.remove_from_cart', item_id=cart_item.id) }}">
+            <form action="{{ url_for('user.remove_from_cart', item_id=cart_item.id) }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button type="submit" class="remove-cart">حذف از سبد</button>
+                <button type="submit">حذف</button>
             </form>
         </div>
+        <hr>
     {% endfor %}
 
-    <b>قیمت کل : {{ cart.total_price() }}</b>
+    <b>قیمت کل: {{ cart.total_price() }}</b>
+
+    <form action="{{ url_for('user.payment') }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">پرداخت</button>
+    </form>
 {% else %}
     سبد خرید خالی است
 {% endif %}
+
 {% endblock %}
