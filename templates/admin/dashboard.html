@@ -5,6 +5,10 @@
 {% endblock %}
 
 {% block content %}
-    this is dashboard
+    <div>
+        {% for cart in carts %}
+        {{ cart.user.phone }} {{ cart.get_status_persian() }} <a href="{{ url_for('admin.order', id= cart.id) }}">اطلاعات بیشتر</a><br>
+        {% endfor %}
+    </div>
     
 {% endblock %}

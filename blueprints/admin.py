@@ -1,7 +1,7 @@
 from flask import Blueprint,render_template,request,session,redirect,abort,url_for
 from config import ADMIN_USERNAME,ADMIN_PASSWORD
 from extentions import db
-from models.tables import Product
+from models.tables import Product,Cart
 
 bp = Blueprint("admin" , __name__)
 
@@ -28,8 +28,24 @@ def login() :
 def dashboard() :
     if session.get("admin_login") is None:
         abort(403)
+    carts = Cart.query.filter(Cart.status != 'pending').all()
+
+    return render_template('admin/dashboard.html', carts=carts)
+
+
+@bp.route("/admin/dashboard/order/<id>" , methods= ["POST","GET"])
+def order(id) :
+    cart = Cart.query.filter(Cart.id == id).first_or_404()
+
+    if request.method == "GET":
+         return render_template('admin/order.html', cart=cart)
     
-    return render_template('admin/dashboard.html')
+    else :
+        status = request.form.get("status")
+        cart.status = status
+        db.session.commit()
+        return redirect(url_for('admin.order', id=id))
+   
 
 
 @bp.route("/admin/dashboard/product" , methods= ["POST","GET"])

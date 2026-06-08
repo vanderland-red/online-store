@@ -15,6 +15,11 @@ class User(db.Model, UserMixin):
         return f"<User {self.username}>"
 
 
+
+
+
+
+
 class Product(db.Model):
     __tablename__ = 'products'
 
@@ -26,6 +31,11 @@ class Product(db.Model):
 
     def __repr__(self):
         return f"<Product {self.name}>"
+
+
+
+
+
 
 
 class Cart(db.Model):
@@ -42,15 +52,36 @@ class Cart(db.Model):
 
     user = db.relationship("User", backref="carts")
 
+
     def total_price(self):
         total = 0
         for item in self.cart_items:
             total += item.product.price * item.quantity
         return total
+    
+
+    def get_status_persian(self):
+        if self.status == 'pending':
+            return 'در انتظار پرداخت (سبد خرید)'
+        
+        if self.status == 'paid':
+            return 'پرداخت شده'
+        
+        if self.status == 'sent':
+            return 'ارسال شده'
+        
+        if self.status == 'rejected':
+            return 'رد شده'
         
 
     def __repr__(self):
         return f"<Cart id={self.id} status={self.status}>"
+
+
+
+
+
+
 
 
 class Payment(db.Model):
@@ -76,7 +107,11 @@ class Payment(db.Model):
         return f"<Payment id={self.id} status={self.status}>"
     
 
-    
+
+
+
+
+
 class CartItem(db.Model):
     __tablename__ = 'cart_items'
 
