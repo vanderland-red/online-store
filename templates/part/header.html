@@ -1,0 +1,11 @@
+<header class="header_text">
+    <img src="{{ url_for('static', filename= 'image/online_store.jpg') }}" alt="online_store">
+    <section class="search_a_parent">
+        <form action="{{ url_for('general.main') }}" method="GET">
+            <input class="search_cadr" type="search" name="search" value="{{ search if value != None }}" placeholder="جستجو...">
+        </form>
+
+        <a href="{{ url_for('general.main') }}">صفحه اصلی</a>
+        <a href="{{ url_for('general.about') }}">درباره ما</a>
+    </section>
+</header>

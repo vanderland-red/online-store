@@ -1,12 +1,21 @@
-from flask import Blueprint,render_template,url_for
+from flask import Blueprint,render_template,url_for,request
 from models.tables import Product
 
 bp = Blueprint("general" , __name__)
 
 @bp.route("/")
 def main() :
-    product = Product.query.filter(Product.active == 1).all()
-    return render_template("main.html" , product=product)
+    search = request.args.get("search", "").strip()
+
+    if search:
+        product = Product.query.filter(
+            Product.active == 1,
+            Product.name.ilike(f"%{search}%")
+        ).all()
+    else:
+        product = Product.query.filter(Product.active == 1).all()
+        
+    return render_template("main.html" , product=product, search=search)
 
 
 @bp.route("/product/<int:id>/<name>")

@@ -6,15 +6,7 @@
 
 {% block content %}
 
-<header class="header_text">
-    <img src="{{ url_for('static', filename= 'image/online_store.jpg') }}" alt="online_store">
-    <section>
-        <a href="{{ url_for('general.main') }}">صفحه اصلی</a>
-        <a href="#">محصولات جدید</a>
-        <a href="{{ url_for('general.about') }}">درباره ما</a>
-        <a href="#">محصولات پر فروش</a>
-    </section>
-</header>
+    {% include 'part/header.html' %}
 
 
 
