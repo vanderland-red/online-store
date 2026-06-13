@@ -1,20 +1,34 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <title>فروشگاه اینترنتی پینکرتون</title>
+<title>فروشگاه اینترنتی پینکرتون</title>
 {% endblock %}
 
 {% block content %}
+
+<header class="header_text">
+    <img src="{{ url_for('static', filename= 'image/online_store.jpg') }}" alt="online_store">
+    <section>
+        <a href="{{ url_for('general.main') }}">صفحه اصلی</a>
+        <a href="#">محصولات جدید</a>
+        <a href="{{ url_for('general.about') }}">درباره ما</a>
+        <a href="#">محصولات پر فروش</a>
+    </section>
+</header>
+
+
+
+<div class="product_box_parent">
     {% for p in product %}
-        <a href="{{ url_for('general.product', id= p.id, name= p.name) }}">{{ p.name }}</a><br><br>
+        {% include 'part/product.html' %}
     {% endfor %}
-    
-    <a style="float: left;" href="{{ url_for('general.about') }}">about</a><br><br>
-    <a style="float: left;" href="{{ url_for('admin.login') }}">admin login</a><br><br>
-    <a style="float: left;" href="{{ url_for('admin.product') }}">add product</a><br><br>
-    <a style="float: left;" href="{{ url_for('user.login') }}">user login</a>
+</div>
+
+<a style="float: left;" href="{{ url_for('admin.login') }}">admin login</a><br><br>
+<a style="float: left;" href="{{ url_for('admin.product') }}">add product</a><br><br>
+<a style="float: left;" href="{{ url_for('user.login') }}">user login</a>
 
 
-        
-    
+
+
 {% endblock %}

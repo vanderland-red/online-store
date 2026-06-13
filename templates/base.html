@@ -4,20 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
     <title>
-        {% block title %}
-        <h1></h1>
-        {% endblock %}
+        {% block title %}فروشگاه اینترنتی پینکرتون{% endblock %}
     </title>
 
     {% block styles %}
-   
     {% endblock %}
 </head>
 <body>
 
-    <header>
-        <h1>this is header</h1>
+    <header class="header_base">
+        <h1>فروشگاه اینترنتی پینکرتون</h1>
     </header>
 
     <main>
@@ -29,9 +28,7 @@
         <p></p>
     </footer>
 
-    {# جا برای اسکریپت‌ها #}
     {% block scripts %}
-    
     {% endblock %}
 </body>
 </html>

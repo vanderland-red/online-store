@@ -1,0 +1,23 @@
+<section class="product_box">
+        <img src="{{ url_for('static', filename='cover/'+p.id|string+'.jpg') }}">
+
+        <div class="top_img">  
+            <span>
+                <img src="{{ url_for('static', filename='image/motor.jpg') }}" alt="motor"> ارسال رایگان
+            </span>
+            <span>
+                <img src="{{ url_for('static', filename='image/tick.jpg') }}" alt="tick"> ضمانت اصالت کالا
+            </span>
+        </div>
+
+        <h3>{{ p.name }}</h3>
+        <p>{{ p.description|truncate(30) }}</p>
+        <a href="{{ url_for('general.product', id=p.id, name=p.name) }}">توضیحات بیشتر</a>
+
+        <div class="click_by_parent">
+            <a class="click_by" href="/add-to-cart?id={{ p.id }}">
+                <span>خرید</span>
+                <img src="{{ url_for('static', filename='image/shop.jpg') }}" alt="shop">
+            </a>
+        </div>
+    </section>
