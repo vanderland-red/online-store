@@ -14,6 +14,8 @@
         <p>{{ p.description|truncate(30) }}</p>
         <a href="{{ url_for('general.product', id=p.id, name=p.name) }}">توضیحات بیشتر</a>
 
+        <span class="price">{{ "{:,}".format(p.price|int) }} تومان</span>
+
         <div class="click_by_parent">
             <a class="click_by" href="/add-to-cart?id={{ p.id }}">
                 <span>خرید</span>
