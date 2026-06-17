@@ -1,19 +1,32 @@
 <section class="product_box">
-        <img src="{{ url_for('static', filename='cover/'+p.id|string+'.jpg') }}">
+
+    <img src="{{ url_for('static', filename='cover/'+p.id|string+'.jpg') }}">
+
+    <section class="top_img_parent">
 
         <div class="top_img">  
             <span>
-                <img src="{{ url_for('static', filename='image/motor.jpg') }}" alt="motor"> ارسال رایگان
+                <img src="{{ url_for('static', filename='image/motor.jpg') }}" alt="motor">
+                ارسال رایگان
             </span>
             <span>
-                <img src="{{ url_for('static', filename='image/tick.jpg') }}" alt="tick"> ضمانت اصالت کالا
+                <img src="{{ url_for('static', filename='image/tick.jpg') }}" alt="tick">
+                ضمانت اصالت کالا
             </span>
         </div>
 
         <h3>{{ p.name }}</h3>
         <p>{{ p.description|truncate(30) }}</p>
-        <a href="{{ url_for('general.product', id=p.id, name=p.name) }}">توضیحات بیشتر</a>
 
+        <!-- لینک مخفی کل کارت -->
+        <a class="hidden_link"
+        href="{{ url_for('general.product', id=p.id, name=p.name) }}">
+        </a>
+
+    </section>
+
+    
+    <div class="bottom_area">
         <span class="price">{{ "{:,}".format(p.price|int) }} تومان</span>
 
         <div class="click_by_parent">
@@ -22,4 +35,6 @@
                 <img src="{{ url_for('static', filename='image/shop.jpg') }}" alt="shop">
             </a>
         </div>
-    </section>
+    </div>
+
+</section>

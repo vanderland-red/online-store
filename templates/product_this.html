@@ -5,17 +5,43 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/product_this.css') }}">
+
 <div class="product-detail">
     <img style="height: 200px;" src="/static/cover/{{ product.id }}.jpg">
     <h1>{{ product.name }}</h1>
-    <p><strong>قیمت:</strong> {{ product.price }} تومان</p>
-    <p><strong>توضیحات:</strong> {{ product.description }}</p>
+    <h5>شماره محصول : {{ product.id }}</h5><br>
+
+    <div class="top_img">  
+        <span>
+            <img src="{{ url_for('static', filename='image/motor.jpg') }}" alt="motor">
+            ارسال رایگان
+        </span>
+        <span>
+            <img src="{{ url_for('static', filename='image/tick.jpg') }}" alt="tick">
+            ضمانت اصالت کالا
+        </span>
+
+         <span>
+            <img src="{{ url_for('static', filename='image/house.jpg') }}" alt="motor">
+            پرداخت درب منزل
+        </span>
+        <span>
+            <img src="{{ url_for('static', filename='image/wallet.jpg') }}" alt="tick">
+            پرداخت امن با تمام کارت ها
+        </span>
+    </div>
+
+    <p><strong>قیمت:</strong> <span style="color: green;font-weight: 700;">
+        {{ "{:,}".format(product.price|int) }}</span> تومان</p>
+
+
     <p>
         <strong>وضعیت:</strong>
         {% if product.active == 1 %}
-        <span style="color: green;">موجود</span>
+        <span class="active">موجود</span>
         {% else %}
-        <span style="color: red;">ناموجود</span>
+        <span class="deactive">ناموجود</span>
         {% endif %}
     </p>
     <br>
@@ -27,8 +53,12 @@
     </form>
 
 
-    <a href="{{ url_for('user.logout') }}">خروج از حساب</a><br><br>
 
     <a href="{{ url_for('general.main') }}">بازگشت به صفحه اصلی</a>
 </div>
+
+    <section class="description_parent">
+        <p class="description_product"><strong>مشخصات :</strong></p>
+            <article>{{ product.description }}</article><br>
+    </section>
 {% endblock %}
