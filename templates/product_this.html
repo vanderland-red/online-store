@@ -58,7 +58,13 @@
 </div>
 
     <section class="description_parent">
-        <p class="description_product"><strong>مشخصات :</strong></p>
+        <p class="description_product"><strong>مشخصات </strong></p>
             <article>{{ product.description }}</article><br>
+    </section>
+
+    <section>
+        {% for p in another_product %}
+            {% include 'part/product.html' %}
+        {% endfor %}
     </section>
 {% endblock %}

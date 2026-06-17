@@ -1,5 +1,6 @@
 from flask import Blueprint,render_template,url_for,request
 from models.tables import Product
+from sqlalchemy import func
 
 bp = Blueprint("general" , __name__)
 
@@ -25,7 +26,17 @@ def product(id, name):
         Product.name == name,
         Product.active == 1
     ).first_or_404()
-    return render_template('product_this.html', product=product)
+
+
+    list_product_name = Product.query.filter(Product.name == name).first()
+    base_name = list_product_name.name[:5]
+
+    another_product = Product.query.filter(
+        Product.active == 1,
+        Product.name.ilike(f'%{base_name}%')
+        ).order_by(func.random()).limit(3).all()
+
+    return render_template('product_this.html', product=product, another_product=another_product)
 
 @bp.route("/about")
 def about() :
