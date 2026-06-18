@@ -7,64 +7,69 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/product_this.css') }}">
 
-<div class="product-detail">
-    <img style="height: 200px;" src="/static/cover/{{ product.id }}.jpg">
-    <h1>{{ product.name }}</h1>
-    <h5>شماره محصول : {{ product.id }}</h5><br>
+<section class="product_and_description">
+    <div class="product-detail">
+        <img style="height: 200px;" src="/static/cover/{{ product.id }}.jpg">
+        <h1>{{ product.name }}</h1>
+        <h5>شماره محصول : {{ product.id }}</h5><br>
 
-    <div class="top_img">  
-        <span>
-            <img src="{{ url_for('static', filename='image/motor.jpg') }}" alt="motor">
-            ارسال رایگان
-        </span>
-        <span>
-            <img src="{{ url_for('static', filename='image/tick.jpg') }}" alt="tick">
-            ضمانت اصالت کالا
-        </span>
+        <div class="top_img">  
+            <span>
+                <img src="{{ url_for('static', filename='image/motor.jpg') }}" alt="motor">
+                ارسال رایگان
+            </span>
+            <span>
+                <img src="{{ url_for('static', filename='image/tick.jpg') }}" alt="tick">
+                ضمانت اصالت کالا
+            </span>
 
-         <span>
-            <img src="{{ url_for('static', filename='image/house.jpg') }}" alt="motor">
-            پرداخت درب منزل
-        </span>
-        <span>
-            <img src="{{ url_for('static', filename='image/wallet.jpg') }}" alt="tick">
-            پرداخت امن با تمام کارت ها
-        </span>
+            <span>
+                <img src="{{ url_for('static', filename='image/house.jpg') }}" alt="motor">
+                پرداخت درب منزل
+            </span>
+            <span>
+                <img src="{{ url_for('static', filename='image/wallet.jpg') }}" alt="tick">
+                پرداخت امن با تمام کارت ها
+            </span>
+        </div>
+
+        <p><strong>قیمت:</strong> <span style="color: green;font-weight: 700;">
+            {{ "{:,}".format(product.price|int) }}</span> تومان</p>
+
+
+        <p>
+            <strong>وضعیت:</strong>
+            {% if product.active == 1 %}
+            <span class="active">موجود</span>
+            {% else %}
+            <span class="deactive">ناموجود</span>
+            {% endif %}
+        </p>
+        <br>
+
+        <form action="/add-to-cart" method="GET">
+            <input type="hidden" name="id" value="{{ product.id }}">
+            <input type="submit" value="اضافه کردن به سبد خرید">
+
+        </form>
+
+
+
+        <a href="{{ url_for('general.main') }}">بازگشت به صفحه اصلی</a>
     </div>
 
-    <p><strong>قیمت:</strong> <span style="color: green;font-weight: 700;">
-        {{ "{:,}".format(product.price|int) }}</span> تومان</p>
+        <section class="description_parent">
+            <p class="description_product"><strong>مشخصات </strong></p>
+                <article>{{ product.description }}</article><br>
+        </section>
+</section>
 
-
-    <p>
-        <strong>وضعیت:</strong>
-        {% if product.active == 1 %}
-        <span class="active">موجود</span>
-        {% else %}
-        <span class="deactive">ناموجود</span>
-        {% endif %}
-    </p>
-    <br>
-
-    <form action="/add-to-cart" method="GET">
-        <input type="hidden" name="id" value="{{ product.id }}">
-        <input type="submit" value="اضافه کردن به سبد خرید">
-
-    </form>
-
-
-
-    <a href="{{ url_for('general.main') }}">بازگشت به صفحه اصلی</a>
-</div>
-
-    <section class="description_parent">
-        <p class="description_product"><strong>مشخصات </strong></p>
-            <article>{{ product.description }}</article><br>
-    </section>
-
-    <section>
-        {% for p in another_product %}
-            {% include 'part/product.html' %}
-        {% endfor %}
+    <h2 class="mahsoolat_moshabeh">محصولات مشابه</h2><br>
+    <section class="suggestion_product_parent">
+        <div class="suggestion_product">
+            {% for p in another_product %}
+                {% include 'part/product.html' %}
+            {% endfor %}
+        </div>
     </section>
 {% endblock %}

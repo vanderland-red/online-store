@@ -33,6 +33,7 @@ def product(id, name):
 
     another_product = Product.query.filter(
         Product.active == 1,
+        Product.id != list_product_name.id,
         Product.name.ilike(f'%{base_name}%')
         ).order_by(func.random()).limit(3).all()
 
