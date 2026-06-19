@@ -1,11 +1,35 @@
 <header class="header_text">
+    
     <img src="{{ url_for('static', filename= 'image/online_store.jpg') }}" alt="online_store">
+    <div class="line_3_img">
+        <img src="{{ url_for('static', filename= 'item/3_line.jpg') }}" alt="">
+    </div>
     <section class="search_a_parent">
+        <span class="close_menu">X</span>
+        
         <form action="/" method="GET">
             <input class="search_cadr" type="search" name="search" value="{{ search if value != None }}" placeholder="جستجو...">
         </form>
 
         <a href="{{ url_for('general.main') }}">صفحه اصلی</a>
+        <a style="float: left;" href="{{ url_for('user.login') }}">ورود/ثبت نام</a>
+        <a href="{{ url_for('user.logout') }}">خروج از حساب</a>
         <a href="{{ url_for('general.about') }}">درباره ما</a>
     </section>
 </header>
+
+<script>
+    const open_click = document.querySelector(".line_3_img")
+    const menu = document.querySelector(".search_a_parent")
+    const close_menu = document.querySelector(".close_menu")
+
+
+    open_click.addEventListener('click', ()=>{
+        menu.style.right = "0px"
+    })
+
+    close_menu.addEventListener("click", ()=>{
+        menu.style.right = "-100%"
+    })
+
+</script>
