@@ -39,6 +39,8 @@ def product(id, name):
 
     return render_template('product_this.html', product=product, another_product=another_product)
 
+    
+
 @bp.route("/about")
 def about() :
     return render_template('about.html')
