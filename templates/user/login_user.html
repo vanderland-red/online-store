@@ -1,37 +1,76 @@
-<!-- templates/user/register.html -->
 {% extends "base.html" %}
 
-{% block title %}
-ثبت نام
-{% endblock %}
+{% block title %}ثبت نام / ورود{% endblock %}
 
 {% block content %}
 
-<h2>ثبت نام</h2>
-<form action="{{ url_for('user.register') }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="text" name="username" placeholder="نام کاربری"><br>
-    <input type="password" name="password" placeholder="رمز عبور"><br>
-    <input type="text" name="phone" placeholder="تلفن"><br>
-    <textarea name="address" placeholder="آدرس"></textarea><br>
-    <input type="submit" value="ثبت نام">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class=flashes>
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-</form>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login_user.css') }}">
+
+<div class="auth-container">
+
+    <div id="register_form">
+        <h2>ثبت نام</h2>
+
+        <form action="{{ url_for('user.register') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <input type="text" name="username" placeholder="نام کاربری">
+            <input type="password" name="password" placeholder="رمز عبور">
+            <input type="text" name="phone" placeholder="تلفن">
+            <textarea name="address" placeholder="آدرس"></textarea>
+
+            <input type="submit" value="ثبت نام">
+
+            <span class="switch-text" onclick="show_login()">
+                قبلاً ثبت نام کرده‌اید؟ ورود
+            </span>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+        </form>
+    </div>
 
 
-<h2>ورود</h2>
-<form action="{{ url_for('user.login') }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="text" name="username" placeholder="نام کاربری"><br>
-    <input type="password" name="password" placeholder="رمز عبور"><br>
-    <input type="submit" value="ورود">
-</form>
+    <!-- 🟢 ورود -->
+    <div id="login_form" style="display:none;">
+        <h2>ورود</h2>
+
+        <form action="{{ url_for('user.login') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <input type="text" name="username" placeholder="نام کاربری">
+            <input type="password" name="password" placeholder="رمز عبور">
+
+            <input type="submit" value="ورود">
+
+            <span class="switch-text" onclick="show_register()">
+                حساب ندارید؟ ثبت نام
+            </span>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    const registerForm = document.getElementById("register_form");
+    const loginForm = document.getElementById("login_form");
+
+    function show_login(){
+        registerForm.style.display = "none";
+        loginForm.style.display = "block";
+    }
+
+    function show_register(){
+        loginForm.style.display = "none";
+        registerForm.style.display = "block";
+    }
+</script>
+
 {% endblock %}
