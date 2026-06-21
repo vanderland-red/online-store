@@ -100,7 +100,7 @@ def add_to_cart():
 
 
 
-@bp.route("/remove-from-cart/<int:item_id>", methods=["POST"])
+@bp.route("/remove-from-cart/<int:item_id>", methods=["GET"])
 @login_required
 def remove_from_cart(item_id):
     cart_item = CartItem.query \
