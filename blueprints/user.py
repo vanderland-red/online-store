@@ -19,11 +19,13 @@ def register():
     address = request.form.get("address")
     
     if not username or not password:
-        return "نام کاربری و رمز عبور الزامی است"
+        flash("رمز عبور اشتباه است", "error")
+        return redirect(url_for("user.register"))
     
     existing_user = User.query.filter_by(username=username).first()
     if existing_user:
-        return "این نام کاربری قبلاً ثبت شده است"
+        flash("این نام کاربری قبلا انتخاب شده است", "warning")
+        return redirect(url_for("user.register"))
     
     u = User(
         username=username,
@@ -35,8 +37,8 @@ def register():
     db.session.add(u)
     db.session.commit()
     
-    flash("ثبت نام با موفقیت انجام شد")
-    return redirect(url_for('user.register'))
+    flash("ثبت نام با موفقیت انجام شد", "success")
+    return redirect(url_for('general.main'))
 
 @bp.route("/user/login", methods=["POST", "GET"])
 def login():
@@ -47,15 +49,17 @@ def login():
     password = request.form.get("password")
     
     if not username or not password:
-        return "نام کاربری و رمز عبور الزامی است"
+        flash("رمز عبور یا نام کاربری اشتباه است", "error")
+        return redirect(url_for("user.login"))
     
     user = User.query.filter_by(username=username).first()
     
     if not user or not check_password_hash(user.password, password):
-        return "نام کاربری یا رمز عبور اشتباه است"
+        flash("رمز عبور یا نام کاربری اشتباه است", "error")
+        return redirect(url_for("user.login"))
     
     login_user(user)
-     
+    flash(" با موفقیت وارد شدید", "success")
     return redirect(url_for('user.dashboard_user'))
 
 
