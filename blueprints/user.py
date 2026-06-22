@@ -102,6 +102,16 @@ def add_to_cart():
     flash("محصول با موفقیت به سبد خرید اضافه شد", "success")
     return redirect(url_for("user.cart"))
 
+@bp.route("/cart", methods=["GET"])
+@login_required
+def cart_empty():
+    cart = Cart.query.filter_by(
+        user_id=current_user.id,
+        status="pending"
+    ).first()
+
+    return render_template("user/dashboard_user.html", cart=cart)
+
 
 
 @bp.route("/remove-from-cart/<int:item_id>", methods=["GET"])

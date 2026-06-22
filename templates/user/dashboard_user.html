@@ -6,7 +6,14 @@
 
 {% block content %}
 
-   {% for cart in current_user.carts | selectattr('status', '!=', 'pending') %}
+<h1 style="text-align: center;">سبد خرید <span style="color: red;">{{ current_user.username }}</span></h1>
+{% if cart |length == 0 %}
+    <div class="empty-cart">
+        🛒 سبد خرید شما خالی است
+    </div>
+{% endif %}
+
+{% for cart in current_user.carts | selectattr('status', '!=', 'pending') %}
     <a href="{{ url_for('user.order', id=cart.id) }}">{{ cart.id }} - {{ cart.get_status_persian() }}</a><br>
 {% endfor %}
 
