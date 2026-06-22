@@ -36,6 +36,8 @@ def register():
     
     db.session.add(u)
     db.session.commit()
+
+    login_user(u)
     
     flash("ثبت نام با موفقیت انجام شد", "success")
     return redirect(url_for('general.main'))
@@ -102,7 +104,7 @@ def add_to_cart():
     flash("محصول با موفقیت به سبد خرید اضافه شد", "success")
     return redirect(url_for("user.cart"))
 
-@bp.route("/cart", methods=["GET"])
+@bp.route("/dashboard", methods=["GET"])
 @login_required
 def cart_empty():
     cart = Cart.query.filter_by(
