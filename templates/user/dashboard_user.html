@@ -5,16 +5,33 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_user.css') }}">
 
-<h1 style="text-align: center;">سبد خرید <span style="color: red;">{{ current_user.username }}</span></h1>
-{% if cart |length == 0 %}
-    <div class="empty-cart">
-        🛒 سبد خرید شما خالی است
-    </div>
-{% endif %}
+<div class="self_parent">
+    <h2>سبد خرید <span> {{ current_user.username }} </span></h2>
+</div>
 
-{% for cart in current_user.carts | selectattr('status', '!=', 'pending') %}
-    <a href="{{ url_for('user.order', id=cart.id) }}">{{ cart.id }} - {{ cart.get_status_persian() }}</a><br>
-{% endfor %}
+
+    <section class="sefareshat_parent">
+
+        <h1>سفارشات</h1>
+        <table class="sefareshat">
+            <tr>
+                <th>شماره سفارش</th>
+                <th>وضعیت سفارش</th>
+                <th>مشاهده</th>
+            </tr>
+            {% for cart in current_user.carts | selectattr('status', '!=', 'pending') %}
+            <tr>
+                <td>{{ cart.id }}</td>
+                <td>{{ cart.get_status_persian() }}</td>
+                <td class="sefareshat_detail"><a href="{{ url_for('user.order', id=cart.id) }}">جزییات</a></td>
+            </tr>
+             {% endfor %}
+             
+        </table>             
+    </section>
+    
+</div>
 
 {% endblock %}

@@ -1,20 +1,26 @@
 <header class="header_text">
-    
-    <img src="{{ url_for('static', filename= 'image/online_store.jpg') }}" alt="online_store">
-    <div class="line_3_img">
-        <img src="{{ url_for('static', filename= 'item/3_line.jpg') }}" alt="">
-    </div>
-    <section class="search_a_parent">
-        <span class="close_menu">X</span>
-        
+
+    <div class="online_and_search_parent">
+        <img class="header_img_online_store" src="{{ url_for('static', filename= 'image/online_store.jpg') }}" alt="online_store">
+        <div class="line_3_img">
+            <img src="{{ url_for('static', filename= 'item/3_line.png') }}" alt="">
+            <span>دسته بندی ها</span>
+        </div>
+
         <form action="/" method="GET">
             <input class="search_cadr" type="search" name="search" value="{{ search if value != None }}" placeholder="جستجو...">
         </form>
+    </div>
 
-        <a href="{{ url_for('general.main') }}">صفحه اصلی</a>
-        <a style="float: left;" href="{{ url_for('user.login') }}">ورود/ثبت نام</a>
-        <a href="{{ url_for('user.logout') }}">خروج از حساب</a>
-        <a href="{{ url_for('general.about') }}">درباره ما</a>
+    <section class="search_a_parent">
+        <span class="close_menu">X</span>
+
+        <div class="search_a_parent_this_is">
+            <a href="{{ url_for('general.main') }}">صفحه اصلی</a>
+            <a style="float: left;" href="{{ url_for('user.login') }}">ورود/ثبت نام</a>
+            <a href="{{ url_for('user.logout') }}">خروج از حساب</a>
+            <a href="{{ url_for('general.about') }}">درباره ما</a>
+        </div>
     </section>
 </header>
 

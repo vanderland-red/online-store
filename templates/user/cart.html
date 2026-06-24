@@ -1,61 +1,68 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <title>سبد خرید</title>
+<title>سبد خرید</title>
 {% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
 
+<h1 class="cart_title">
+    <span>سبد خرید شما</span>
+</h1>
 
 {% set cart = current_user.carts
 | selectattr('status','equalto','pending')
-| list | first %}
+| list | first 
+%}
 
 {% if cart %}
-
 
 <div class="cart-box">
 
     {% for cart_item in cart.cart_items %}
     <div class="cart-item">
         <div class="cart-info">
-            <img style="width: 60px;height:auto;" src="/static/cover/{{ cart_item.product.id }}.jpg">
+            <img style="width:60px" src="/static/cover/{{ cart_item.product.id }}.jpg">
             <span class="product-name">{{ cart_item.product.name }}</span>
-            <span class="product-qty">تعداد: {{ cart_item.quantity }}</span>
         </div>
 
-    <form action="{{ url_for('user.remove_from_cart', item_id=cart_item.id) }}" method="GET">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button type="submit" class="qty-btn">-</button>
-    </form>
+        <form action="{{ url_for('user.remove_from_cart', item_id=cart_item.id) }}" method="GET">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="qty-btn">-</button>
+        </form>
+
         <span>{{ cart_item.quantity }}</span>
 
-    <form action="{{ url_for('user.add_to_cart') }}" method="GET">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="hidden" name="id" value="{{ cart_item.product.id }}">
-        <button type="submit" class="qty-btn">+</button>
-    </form>
-
+        <form action="{{ url_for('user.add_to_cart') }}" method="GET">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="id" value="{{ cart_item.product.id }}">
+            <button class="qty-btn">+</button>
+        </form>
     </div>
     {% endfor %}
 
     <div class="cart-footer">
-        <div class="total-price">
-            قیمت کل:
-             <span>{{ "{:,}".format(cart.total_price()|int) }}</span> تومان
-        </div>
+        {% if cart.cart_items|length == 0 %}
+            <div class="empty-cart">سبد خرید خالی است 🛒</div>
+        {% else %}
+            <div class="total-price">
+                قیمت کل:
+                <span>{{ "{:,}".format(cart.total_price()|int) }}</span> تومان
+            </div>
 
-        <form action="{{ url_for('user.payment') }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <button type="submit" class="pay-btn">پرداخت</button>
-        </form>
+            <form action="{{ url_for('user.payment') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="pay-btn">پرداخت</button>
+            </form>
+        {% endif %}
     </div>
 
 </div>
+
 {% else %}
 <div class="empty-cart">
-    سبد خرید خالی است 🛒
+    سبد خریدی وجود ندارد 🛒
 </div>
 {% endif %}
 

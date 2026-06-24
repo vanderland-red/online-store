@@ -5,11 +5,31 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/order_user.css') }}">
 
-     {{ cart.get_status_persian() }}<br><br>
+<div class="order-container">
 
-    {% for item in cart.cart_items %}
-        {{ item.product.name }} : {{ item.product.price }}<br>
-    {% endfor %}
+    <h1>سفارش شماره{{ cart.id }} - <span>{{ cart.get_status_persian() }}</span></h1>
+    <table class="cart_parent">
+        <tr>
+            <th>شماره محصول</th>
+            <th>نام محصول</th>
+            <th>قیمت</th>
+            <th>تعداد</th>
+        </tr>
+        {% for item in cart.cart_items %}
+        <tr>
+            <td>{{ item.product.id }}</td>
+            <td>{{ item.product.name }}</td>
+            <td class="price">{{ "{:,}".format(item.product.price|int) }} تومان</td>
+            <td>{{ item.quantity }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+   
+</div>
+
+
 
 {% endblock %}

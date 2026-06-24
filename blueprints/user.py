@@ -134,6 +134,10 @@ def remove_from_cart(item_id):
 
     db.session.commit()
 
+    remaining_items = CartItem.query.filter_by(cart_id=cart_item.cart_id).count()
+    if remaining_items == 0:
+        flash("سبد خرید خالی شد", "info")
+
     flash("محصول از سبد خرید حذف شد", "success")
     return redirect(url_for("user.cart"))
 
