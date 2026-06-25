@@ -20,6 +20,7 @@
 
 <div class="cart-box">
 
+    <!-- این قسمت مربوط به سبد خرید هستش-->
     {% for cart_item in cart.cart_items %}
     <div class="cart-item">
         <div class="cart-info">
@@ -61,7 +62,7 @@
 </div>
 
 {% else %}
-<div class="empty-cart">
+<div class="empty_cart">
     سبد خریدی وجود ندارد 🛒
 </div>
 {% endif %}

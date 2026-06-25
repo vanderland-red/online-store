@@ -45,6 +45,8 @@ def register():
 @bp.route("/user/login", methods=["POST", "GET"])
 def login():
     if request.method == "GET":
+        if current_user.is_authenticated :
+            return redirect(url_for("user.dashboard_user"))
         return render_template('user/login_user.html')
     
     username = request.form.get("username")
@@ -220,7 +222,10 @@ def verify():
 @bp.route("/user/dashboard")
 @login_required
 def dashboard_user():
-    return render_template("user/dashboard_user.html")
+    cart = Cart.query.filter_by(
+        user_id=current_user.id
+    ).first()
+    return render_template("user/dashboard_user.html", cart=cart)
 
 
 @bp.route("/user/dashboard/order/<id>", methods=["GET"])

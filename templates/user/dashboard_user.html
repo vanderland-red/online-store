@@ -1,37 +1,59 @@
 {% extends "base.html" %}
 
 {% block title %}
-   <title>پنل کاربری</title>
+<title>پنل کاربری</title>
 {% endblock %}
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_user.css') }}">
 
+<!-- عنوان صفحه -->
 <div class="self_parent">
-    <h2>سبد خرید <span> {{ current_user.username }} </span></h2>
+    <h2>
+        پنل کاربری
+        <span>{{ current_user.username }}</span>
+    </h2>
 </div>
 
+{% if cart.cart_items|length == 0 %}
+    <div class="empty_cart_parent">
+        <div class="empty_cart">سبد خرید خالی است 🛒</div>
+    </div>
+{% else %}
 
-    <section class="sefareshat_parent">
+<a class="sabad_kharid" href="{{ url_for('user.cart') }}">
+    مشاهده سبد خرید
+</a>
 
-        <h1>سفارشات</h1>
-        <table class="sefareshat">
+<section class="sefareshat_parent">
+
+    <h1>سفارشات</h1>
+
+    <table class="sefareshat">
+        <thead>
             <tr>
                 <th>شماره سفارش</th>
                 <th>وضعیت سفارش</th>
                 <th>مشاهده</th>
             </tr>
+        </thead>
+
+        <tbody>
             {% for cart in current_user.carts | selectattr('status', '!=', 'pending') %}
             <tr>
                 <td>{{ cart.id }}</td>
                 <td>{{ cart.get_status_persian() }}</td>
-                <td class="sefareshat_detail"><a href="{{ url_for('user.order', id=cart.id) }}">جزییات</a></td>
+                <td class="sefareshat_detail">
+                    <a href="{{ url_for('user.order', id=cart.id) }}">جزئیات</a>
+                </td>
             </tr>
-             {% endfor %}
-             
-        </table>             
-    </section>
-    
-</div>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</section>
+
+{% endif %}
+
 
 {% endblock %}
