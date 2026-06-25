@@ -19,7 +19,7 @@ def register():
     address = request.form.get("address")
     
     if not username or not password:
-        flash("رمز عبور اشتباه است", "error")
+        flash("رمز عبور را وارد نمایید", "error")
         return redirect(url_for("user.register"))
     
     existing_user = User.query.filter_by(username=username).first()
@@ -226,6 +226,46 @@ def dashboard_user():
         user_id=current_user.id
     ).first()
     return render_template("user/dashboard_user.html", cart=cart)
+
+
+
+@bp.route("/user/dashboard", methods=["GET", "POST"])
+@login_required
+def dashboard_user_change():
+
+    if request.method == "GET":
+        return render_template("user/dashboard_user.html")
+
+    username = request.form.get("username")
+    password = request.form.get("password")
+    phone = request.form.get("phone")
+    address = request.form.get("address")
+
+    if not username:
+        flash("نام کاربری را وارد نمایید", "error")
+        return redirect(url_for("user.dashboard_user_change"))
+
+    existing_user = User.query.filter(
+        User.username == username,
+        User.id != current_user.id
+    ).first()
+
+    if existing_user:
+        flash("این نام کاربری قبلا انتخاب شده است", "warning")
+        return redirect(url_for("user.dashboard_user_change"))
+
+    current_user.username = username
+
+    if password:
+        current_user.password = generate_password_hash(password)
+
+    current_user.phone = phone
+    current_user.address = address
+
+    db.session.commit()
+
+    flash("اطلاعات با موفقیت بروزرسانی شد", "success")
+    return redirect(url_for("user.dashboard_user_change"))
 
 
 @bp.route("/user/dashboard/order/<id>", methods=["GET"])

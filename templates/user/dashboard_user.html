@@ -55,5 +55,24 @@
 
 {% endif %}
 
+<section class="change_panel_user">
+    <h1>ویرایش اطلاعات</h1>
+    <form action="{{ url_for('user.dashboard_user') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <input type="text" name="username" value="{{current_user.username}}" placeholder="نام کاربری">
+            <input type="password" name="password" placeholder="رمز عبور">
+            <input type="text" name="phone" value="{{current_user.phone}}" placeholder="تلفن">
+            <textarea name="address" value="{{current_user.address}}" placeholder="آدرس"></textarea>
+
+            <input type="submit" value="ثبت تغییرات">
+
+        </form>
+        
+        <div class="out_click_panel">
+        <a class="out_click" href="{{ url_for('user.logout') }}">خروج از حساب</a>
+        </div>
+</section>
+
 
 {% endblock %}
