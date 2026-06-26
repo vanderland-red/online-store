@@ -5,10 +5,22 @@
 {% endblock %}
 
 {% block content %}
-    <div>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dasborad.css') }}">
+
+    <section class="admin_dashboard_panel">
+    <div class="orders_list">
         {% for cart in carts %}
-        {{ cart.user.phone }} {{ cart.get_status_persian() }} <a href="{{ url_for('admin.order', id= cart.id) }}">اطلاعات بیشتر</a><br>
+        <div class="order_item">
+            <div class="order_info">
+                <span class="order_phone">{{ cart.user.phone }}</span>
+                <span class="order_status">{{ cart.get_status_persian() }}</span>
+            </div>
+            <a class="order_link" href="{{ url_for('admin.order', id=cart.id) }}">
+                اطلاعات بیشتر
+            </a>
+        </div>
         {% endfor %}
     </div>
-    
+</section>
+
 {% endblock %}

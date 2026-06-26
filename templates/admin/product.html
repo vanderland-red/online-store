@@ -5,36 +5,45 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_edit.css') }}">
 
-   <table>
-      <tr>
-         <td>تصویر</td>
-         <th>اسم</th>
-         <th>توضیحات</th>
-         <th>قیمت</th>
-         <th>فعال</th>
-         <th>ویرایش</th>
-      </tr>
+   <section class="edit_parent_admin">
+      
+      <h1>اضافه کردن محصول جدید</h1>
+      <form class="add_mahsool" action="#" method="POST" enctype="multipart/form-data">
+         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+         <label>cover:</label><input type="file" name="cover"><br>
+         <input type="text" name="name" placeholder="نام محصول"><br>
+         <textarea name="description" placeholder="توضیحات"></textarea><br>
+         <input type="number" name="price" placeholder="قیمت محصول"><br>
+         <label for="active">فعال:</label><input type="checkbox" value="1" name="active" id="active"><br>
+         <input type="submit">
+      </form>
+      </div>
+   </section>
 
-      {% for p in products %}
+      <h1 class="title_list_mahsoolat">لیست محصولات اضافه شده</h1>
+
+      <table>
          <tr>
-            <td><img style="width: 30px; height: 30px;" src="/static/cover/{{ p.id }}.jpg"></td>
-            <td>{{p.name }}</td>
-            <td>{{ p.description }}</td>
-            <td>{{ p.price }}</td>
-            <td>{{ "Yse" if p.active== 1 else "No"}}</td>
-            <td><a href="{{ url_for('admin.edit_product', id= p.id)}}">ویرایش</a></td>
+            <td>تصویر</td>
+            <th>اسم</th>
+            <th>توضیحات</th>
+            <th>قیمت</th>
+            <th>فعال</th>
+            <th>ویرایش</th>
          </tr>
-      {% endfor %}
-   </table>
 
-   <form action="#" method="POST" enctype="multipart/form-data">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <label>cover:</label><input type="file" name="cover"><br>
-      <input type="text" name="name" placeholder="نام محصول"><br>
-      <textarea name="description" placeholder="توضیحات"></textarea><br>
-      <input type="number" name="price" placeholder="قیمت محصول"><br>
-      <label>فعال:</label><input type="checkbox" value="1" name="active" ><br>
-      <input type="submit">
-   </form>
+         {% for p in products %}
+            <tr class="discription_tr">
+               <td><img src="/static/cover/{{ p.id }}.jpg"></td>
+               <td data-label="اسم">{{ p.name|truncate(50) }}</td>
+               <td data-label="توضیحات">{{ p.description|truncate(150) }}</td>
+               <td data-label="قیمت">{{ "{:,}".format(p.price|int) }}</td>
+               <td data-label="فعال؟">{{ "Yse" if p.active== 1 else "No"}}</td>
+               <td><a href="{{ url_for('admin.edit_product', id= p.id)}}">ویرایش</a></td>
+            </tr>
+         {% endfor %}
+      </table>
+
 {% endblock %}

@@ -18,7 +18,11 @@
 
     <section class="search_a_parent">
         <span class="close_menu">X</span>
-
+        {% if request.endpoint.startswith("admin") %}
+            <a style="float: left;" href="{{ url_for('admin.login') }}">پنل مدیریت</a>
+            <a style="float: left;" href="{{ url_for('admin.product') }}">صفحه محصولات</a>
+            <a style="float: left;" href="{{ url_for('admin.logout') }}">خروج از حساب</a>
+        {% else %}
         <div class="search_a_parent_this_is">
             <a href="{{ url_for('general.main') }}">خانه</a>
             {% if current_user.is_authenticated %}
@@ -29,6 +33,7 @@
             
             <a href="{{ url_for('user.logout') }}">خروج از حساب</a>
             <a href="{{ url_for('general.about') }}">درباره ما</a>
+        {% endif %}
         </div>
     </section>
 </header>

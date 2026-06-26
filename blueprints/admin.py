@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,request,session,redirect,abort,url_for
+from flask import Blueprint,render_template,request,session,redirect,abort,url_for,flash
 from config import ADMIN_USERNAME,ADMIN_PASSWORD
 from extentions import db
 from models.tables import Product,Cart
@@ -12,17 +12,34 @@ def before_request() :
         abort(403)
 
 
-@bp.route("/admin/login" , methods= ["POST" , "GET"])
-def login() :
-    username = request.form.get("username", None)
-    password = request.form.get("password", None)
+@bp.route("/admin/login", methods=["GET", "POST"])
+def login():
 
-    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD :
-        session["admin_login"] = username
-        return redirect(url_for('admin.dashboard'))
+    # اگر قبلاً لاگین کرده، دیگه صفحه لاگین نشون نمیده
+    if session.get("admin_login"):
+        return redirect(url_for("admin.dashboard"))
 
-    return render_template('admin/login.html')
+    if request.method == "GET":
+        return render_template("admin/login.html")
 
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    if username != ADMIN_USERNAME or password != ADMIN_PASSWORD:
+        flash("نام کاربری یا رمز عبور اشتباه است", "error")
+        return render_template("admin/login.html")
+
+    # ذخیره وضعیت لاگین
+    session["admin_login"] = username
+    flash("با موفقیت وارد شدید", "success")
+    return redirect(url_for("admin.dashboard"))
+
+
+@bp.route("/admin/logout")
+def logout():
+    session.pop("admin_login", None)  # حذف لاگین ادمین
+    flash("با موفقیت از پنل مدیریت خارج شدید", "success")
+    return redirect(url_for("admin.login"))
 
 @bp.route("/admin/dashboard" , methods= ["POST","GET"])
 def dashboard() :
@@ -33,18 +50,20 @@ def dashboard() :
     return render_template('admin/dashboard.html', carts=carts)
 
 
-@bp.route("/admin/dashboard/order/<id>" , methods= ["POST","GET"])
-def order(id) :
-    cart = Cart.query.filter(Cart.id == id).first_or_404()
+@bp.route("/admin/dashboard/order/<int:id>", methods=["GET", "POST"])
+def order(id):
+    cart = Cart.query.get_or_404(id)
 
-    if request.method == "GET":
-         return render_template('admin/order.html', cart=cart)
-    
-    else :
+    if request.method == "POST":
         status = request.form.get("status")
-        cart.status = status
-        db.session.commit()
-        return redirect(url_for('admin.order', id=id))
+
+        if status in ["pending", "paid", "sent", "rejected"]:
+            cart.status = status
+            db.session.commit()
+
+        return redirect(url_for("admin.order", id=id))
+
+    return render_template("admin/order.html", cart=cart)
    
 
 

@@ -103,6 +103,18 @@ class Payment(db.Model):
     )
     cart = db.relationship("Cart", backref="payments")
 
+    def get_status_persian(self):
+        if self.status in ["pending"]:
+            return "در انتظار پرداخت..."
+
+        if self.status in ["success", "paid"]:
+            return "پرداخت شده✅"
+
+        if self.status in ["failed", "rejected"]:
+            return "عدم پرداخت❌"
+
+        return "نامشخص"
+
     def __repr__(self):
         return f"<Payment id={self.id} status={self.status}>"
     

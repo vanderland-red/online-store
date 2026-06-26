@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-   
+   <title>صفحه محصولات</title>
 {% endblock %}
 
 {% block content %}
@@ -25,6 +25,25 @@
             <td>{{ item.quantity }}</td>
         </tr>
         {% endfor %}
+
+        <table class="cart_payment">
+            <tr>
+                <th>وضعیت</th>
+                <th>مبلغ</th>
+                <th>شماره پیگیری</th>
+                <th>شماره تراکنش</th>
+                <th>شماره کارت</th>
+            </tr>
+            {% for pay in cart.payments %}
+                <tr>
+                    <td>{{ pay.get_status_persian() }}</td>
+                    <td>{{ "{:,}".format(pay.price|int) }} تومان</td>
+                    <td>{{ pay.refid }}</td>
+                    <td>{{ pay.transation_id }}</td>
+                    <td>{{ pay.card_pan }}</td>
+                </tr>
+            {% endfor %}
+        </table>
 
     </table>
    

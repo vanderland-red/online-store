@@ -5,21 +5,47 @@
 {% endblock %}
 
 {% block content %}
-        <form action="#" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <select name="status">
-                <option value="pending" {% if cart.status == "pending" %} selected {% endif %}>در انتظار پرداخت (سبد خرید)</option>
-                <option value="paid" {% if cart.status == "piad" %} selected {% endif %}>پرداخت شده</option>
-                <option value="sent" {% if cart.status == "sent" %} selected {% endif %}>ارسال شده</option>
-                <option value="rejected" {% if cart.status == "rejected" %} selected {% endif %}>رد شده</option>
-                <input type="submit" value="تغییر">
-            </select>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_dasborad_order.css') }}">
 
-        </form>
-    <div>
-        {% for item in cart.cart_items %}
-            {{ item.product.name }}<br>
-        {% endfor %}    
-    </div>
+    <section class="admin_dashboard_order_parent">
+
+            <form action="{{ url_for('admin.order', id=cart.id) }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <select name="status">
+                    <option value="pending" {% if cart.status == "pending" %} selected {% endif %}>در انتظار پرداخت (سبد خرید)</option>
+                    <option value="paid" {% if cart.status == "paid" %} selected {% endif %}>پرداخت شده</option>
+                    <option value="sent" {% if cart.status == "sent" %} selected {% endif %}>ارسال شده</option>
+                    <option value="rejected" {% if cart.status == "rejected" %} selected {% endif %}>رد شده</option>
+                </select>
+                <input type="submit" value="تغییر">
+
+            </form>
+        <div> <!-- چاپ اسم محصول-->
+            {% for item in cart.cart_items %}
+                {{ item.product.name }}<br>
+            {% endfor %}    
+        </div>
+
+
+        <table class="cart_payment">
+            <tr>
+                <th>وضعیت</th>
+                <th>مبلغ</th>
+                <th>شماره پیگیری</th>
+                <th>شماره تراکنش</th>
+                <th>شماره کارت</th>
+            </tr>
+            {% for pay in cart.payments %}
+                <tr>
+                    <td>{{ pay.get_status_persian() }}</td>
+                    <td>{{ "{:,}".format(pay.price|int) }} تومان</td>
+                    <td>{{ pay.refid }}</td>
+                    <td>{{ pay.transation_id }}</td>
+                    <td>{{ pay.card_pan }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
+
     
 {% endblock %}
