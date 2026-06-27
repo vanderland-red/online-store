@@ -14,7 +14,8 @@ def main() :
             Product.name.ilike(f"%{search}%")
         ).all()
     else:
-        product = Product.query.filter(Product.active == 1).all()
+        product = Product.query.filter(Product.active == 1).order_by(func.random()).all()
+
         
     return render_template("main.html" , product=product, search=search)
 

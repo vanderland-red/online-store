@@ -1,21 +1,28 @@
 {% extends "base.html" %}
 
 {% block title %}
-صفحه اصلی
+    <title>ویرایش محصول {{ product.id }}</title>
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit_product_this.css') }}">
+
+    <h1>ویرایش محصول</h1>
     <section class="edit_parent">
 
-        <img style="width: 100px; height: 100px;" src="/static/cover/{{ product.id }}.jpg">
+        <img style="width: 150px; height: 150px;"src="{{ url_for('static', filename='cover/' ~ product.id ~ '.jpg') }}">
         <form action="{{ url_for('admin.edit_product', id=product.id) }}" method="POST" enctype="multipart/form-data">
+            <h4>انتخاب عکس</h4>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <label>cover:</label><input type="file" name="cover"><br>
-            <input type="text" name="name" value="{{ product.name }}" placeholder="نام محصول"><br>
-            <input type="text" name="description" value="{{ product.description }}" placeholder="توضیحات"><br>
-            <input type="number" name="price" value="{{ product.price }}" placeholder="قیمت"><br>
-            <label>فعال:</label><input type="checkbox" value="1" name="active" {% if product.active == 1 %}checked{% endif %}>
-            <input type="submit">
+            <input type="file" name="cover"><br>
+            <h4>نام محصول</h4>
+            <input type="text" name="name" value="{{ product.name }}">
+            <h4>توضیحات</h4>
+            <textarea name="description">{{ product.description }}</textarea>
+            <h4>قیمت</h4>
+            <input type="text" name="price" value="{{ "{:,}".format(product.price|int) }}  تومان ">
+            <label for="active">فعال:</label><input type="checkbox" id="active" value="1" name="active" {% if product.active == 1 %}checked{% endif %}>
+            <input type="submit" value="ثبت تغییرات">
 
         </form>
 
