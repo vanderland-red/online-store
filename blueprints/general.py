@@ -21,14 +21,14 @@ def main() :
 
 
 @bp.route("/product/<int:id>/<name>")
-def product(id, name):
+def product(id, name): # وقتی کاربر کلیک کرد روی محصول براش این داده ها ارسا بشه
     product = Product.query.filter(
         Product.id == id, 
         Product.name == name,
         Product.active == 1
     ).first_or_404()
 
-
+    # پیدا کردن محصولات مشابه
     list_product_name = Product.query.filter(Product.name == name).first()
     base_name = list_product_name.name[:5]
 

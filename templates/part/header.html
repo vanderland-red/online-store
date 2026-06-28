@@ -1,9 +1,15 @@
 <header class="header_text">
 
     <div class="online_and_search_parent">
-        <a href="{{ url_for('general.main') }}">
-            <img class="header_img_online_store" src="{{ url_for('static', filename= 'image/banner.png') }}" alt="online_store">
-        </a>
+        <div id="mainPhoto">
+            <a href="{{ url_for('general.main') }}">
+                <img
+                    id="sliderImage"
+                    class="header_img_online_store"
+                    src="{{ url_for('static', filename='image/banner.png') }}"
+                    alt="online_store">
+            </a>
+        </div>
         
         <div class="line_3_img">
             <img src="{{ url_for('static', filename= 'item/3_line.png') }}" alt="">
@@ -52,4 +58,36 @@
         menu.style.right = "-100%"
     })
 
+</script>
+
+
+
+<script>
+    var images = [
+        "{{ url_for('static', filename='image/banner.png') }}",
+        "{{ url_for('static', filename='image/banner2.png') }}",
+        "{{ url_for('static', filename='image/banner3.png') }}"
+    ];
+
+    var index = 1
+    var slider = document.getElementById("sliderImage")
+
+    function change() {
+
+        slider.style.opacity = 0
+
+        setTimeout(function(){
+
+            slider.src = images[index]
+            slider.style.opacity = 1
+        if (index === images.length - 1){
+            index = 0;
+        } else{
+            index++;
+        }
+
+        },600)   
+      
+    }
+    setInterval(change, 3000)
 </script>
