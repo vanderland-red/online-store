@@ -33,12 +33,14 @@
             <a href="{{ url_for('general.main') }}">خانه</a>
             {% if current_user.is_authenticated %}
                 <a style="float: left;" href="{{ url_for('user.login') }}">پنل کاربری</a>
+                <a style="float: left;" href="{{ url_for('user.logout') }}">خروج از حساب</a>
                 {% else %}
+
                 <a style="float: left;" href="{{ url_for('user.login') }}">ورود/ثبت نام</a>
             {% endif %}
             
-            <a href="{{ url_for('user.logout') }}">خروج از حساب</a>
             <a href="{{ url_for('general.about') }}">درباره ما</a>
+            <a style="float: left;" href="{{ url_for('admin.login') }}">پنل مدیریت</a>
         {% endif %}
         </div>
     </section>

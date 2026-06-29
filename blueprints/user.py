@@ -32,7 +32,7 @@ def register():
         return redirect(url_for("user.register"))
     
     if not re.fullmatch(r"(?:\+98|0)9\d{9}", phone):
-        flash("شماره موبایل وارد شده صحیح نیست", "info")
+        flash("شماره موبایل وارد شده صحیح نیست", "warning")
         return redirect(url_for("user.register"))
     
     existing_user = User.query.filter_by(username=username).first()
