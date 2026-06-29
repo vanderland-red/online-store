@@ -55,6 +55,17 @@
 
 {% endif %}
 
+    <article class="suggestion_user">
+        <h3>پیشنهاد خود را بنویسید</h3>
+         <form id="suggestionForm" action="{{ url_for('user.suggestion') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <textarea name="suggestion"></textarea>
+            <input type="submit" value="ارسال پیشنهاد">
+        </form>
+        
+    </article>
+    
+
 <section class="change_panel_user">
     <h1>ویرایش اطلاعات</h1>
     <form action="{{ url_for('user.dashboard_user') }}" method="POST">
@@ -68,11 +79,10 @@
             <input type="submit" value="ثبت تغییرات">
 
         </form>
-        
-        <div class="out_click_panel">
-        <a class="out_click" href="{{ url_for('user.logout') }}">خروج از حساب</a>
-        </div>
+
+       
 </section>
+
 
 
 {% endblock %}

@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for,flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required,current_user,logout_user
-from models.tables import User,Cart,Product,CartItem,Payment
+from models.tables import User,Cart,Product,CartItem,Payment,UserSuggestion
 from extentions import db
 import uuid
+import re
 
 bp = Blueprint("user", __name__)
 
@@ -13,13 +14,25 @@ def register():
     if request.method == "GET":
         return render_template('user/login_user.html')
     
-    username = request.form.get("username")
-    password = request.form.get("password")
-    phone = request.form.get("phone")
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "").strip()
+    phone = request.form.get("phone", "").strip()
     address = request.form.get("address")
     
     if not username or not password:
         flash("رمز عبور را وارد نمایید", "error")
+        return redirect(url_for("user.register"))
+    
+    if len(username) < 7 :
+        flash(" نام کاربری باید بیشتر از 7 کلمه باشد", "error")
+        return redirect(url_for("user.register"))
+    
+    if len(password) < 5 :
+        flash("رمز عبور ایمن نیست", "error")
+        return redirect(url_for("user.register"))
+    
+    if not re.fullmatch(r"(?:\+98|0)9\d{9}", phone):
+        flash("شماره موبایل وارد شده صحیح نیست", "info")
         return redirect(url_for("user.register"))
     
     existing_user = User.query.filter_by(username=username).first()
@@ -33,7 +46,7 @@ def register():
         phone=phone,
         address=address
     )
-    
+
     db.session.add(u)
     db.session.commit()
 
@@ -41,6 +54,8 @@ def register():
     
     flash("ثبت نام با موفقیت انجام شد", "success")
     return redirect(url_for('general.main'))
+
+
 
 @bp.route("/user/login", methods=["POST", "GET"])
 def login():
@@ -274,3 +289,22 @@ def order(id):
     cart = Cart.query.filter_by(id=id, user_id=current_user.id).first_or_404()
     return render_template("user/order_user.html", cart=cart)
 
+
+@bp.route("/user/dashboard/suggestion", methods=["POST"])
+@login_required
+def suggestion() :
+
+    suggestion_text = request.form.get("suggestion", "").strip()
+
+    if suggestion_text == "" :
+        flash("لطفا متن پیشنهاد را وارد کنید", "info")
+        return redirect(url_for("user.dashboard_user"))
+    
+    add = UserSuggestion(
+        user_id = current_user.id,
+        suggestion_text=suggestion_text
+        )
+    db.session.add(add)
+    db.session.commit()
+    flash("پیشنهاد شما با موفقیت ارسال شد", "success")
+    return redirect(url_for("user.dashboard_user"))

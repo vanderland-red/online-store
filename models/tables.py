@@ -135,3 +135,14 @@ class CartItem(db.Model):
 
     product = db.relationship("Product", backref="cart_items")
     cart = db.relationship("Cart", backref="cart_items")
+
+
+
+
+class UserSuggestion(db.Model):
+    __tablename__ = 'user_suggestions'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    suggestion_text = db.Column(db.String(300), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.now())

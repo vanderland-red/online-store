@@ -5,27 +5,30 @@
     <title>درگاه پرداخت تستی</title>
 </head>
 <body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mock_gateway.css') }}">
 
-<h2>درگاه پرداخت (Mock)</h2>
+    <section class="dargah_pardakht_parent">
+        <h2>درگاه پرداخت (Mock)</h2>
 
-<p>مبلغ: {{ payment.price }} تومان</p>
-<p>توکن: {{ payment.token }}</p>
+        <p>مبلغ: {{ "{:,}".format(payment.price|int) }} تومان</p>
+        <p>توکن: {{ payment.token }}</p>
 
-<form action="{{ url_for('user.verify') }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="token" value="{{ payment.token }}">
-    <input type="hidden" name="result" value="success">
-    <button type="submit">پرداخت موفق</button>
-</form>
+        <form class="pardakht_ok" action="{{ url_for('user.verify') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="token" value="{{ payment.token }}">
+            <input type="hidden" name="result" value="success">
+            <button type="submit">پرداخت موفق</button>
+        </form>
 
-<br>
+        <br>
 
-<form action="{{ url_for('user.verify') }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="token" value="{{ payment.token }}">
-    <input type="hidden" name="result" value="failed">
-    <button type="submit">پرداخت ناموفق</button>
-</form>
+        <form class="pardakht_no" action="{{ url_for('user.verify') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="token" value="{{ payment.token }}">
+            <input type="hidden" name="result" value="failed">
+            <button type="submit">پرداخت ناموفق</button>
+        </form>
+    </section>
 
 </body>
 </html>
